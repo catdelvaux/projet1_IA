@@ -9,7 +9,7 @@ if __name__ == '__main__':
     problem = AtomPlacement("instances/i01.txt")
     init_state = problem.init_state()
     step_limit = 100
-    node = random_walk(problem, step_limit)
+    node = randomized_max_value(problem, step_limit)
     # node = maxvalue(problem, step_limit)
     # node = randomized_maxvalue(problem, step_limit)
     print("Best solution found:")

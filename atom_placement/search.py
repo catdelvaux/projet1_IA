@@ -24,8 +24,16 @@ def max_value(problem: AtomPlacement, limit=100) -> LSNode:
     Returns a LSNode corresponding to the best found solution
     """
     # TODO
+    current = LSNode(problem, problem.init_state(), 0)
+    best = current
 
-    return None
+    for step in range(limit):
+        neighbours = list(current.expand())
+        current = min(neighbours, key=lambda x: x.value())
+        if current.value() < best.value():
+            best = current
+
+    return best
 
 
 def randomized_max_value(problem: AtomPlacement, limit=100) -> LSNode:
@@ -34,6 +42,14 @@ def randomized_max_value(problem: AtomPlacement, limit=100) -> LSNode:
     at each iteration.
     Returns a LSNode corresponding to the best found solution
     """
-    # TODO
+    current = LSNode(problem, problem.init_state(), 0)
+    best = current
 
-    return None
+    for step in range(limit):
+        neighbours = list(current.expand())
+        neighbours.sort(key=lambda x: x.value())
+        current = random.choice(neighbours[0:5])
+        if current.value() < best.value():
+            best = current
+
+    return best
