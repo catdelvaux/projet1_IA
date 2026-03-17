@@ -5,9 +5,47 @@ from pycsp3 import *
 
 def solve_minesweeper(clues: list[list[int]]) -> list[(int, int)]:
     clear()
+    # TODO (Done?)
+    n = len(clues)
+    m = len(clues[0])
 
-    # TODO
+    # Variables: 1 if there's a mine, 0 otherwise
+    x = VarArray(size=[n, m], dom={0, 1})
 
+    # Ensures that there is no mine on clues
+    satisfy(
+        x[i][j] == 0
+        for i in range(n)
+        for j in range(m)
+        if clues[i][j] != -1
+    )
+
+    # Match the clues
+    for i in range(n):
+        for j in range(m):
+            if clues[i][j] != -1:
+                # Checks around the clue cell
+                neighbors = []
+                for a in [-1,0,1]:
+                    for b in [-1,0,1]:
+                        if a == 0 and b == 0:
+                            continue
+                        ni = i+a
+                        nj = j+b
+                        if 0 <= ni < n and 0 <= nj < m:
+                            neighbors.append(x[ni][nj])
+                            
+                # Ensures that the number of the cell is equal to the number of mines around it (neighbors)
+                satisfy(Sum(neighbors) == clues[i][j])
+
+    if solve() is SAT:
+        return [
+                (i, j) 
+                for i in range(n) 
+                for j in range(m) 
+                if x[i][j].value == 1
+                ]
+  
     return None
 
 
@@ -47,7 +85,7 @@ def parse_instance(input_file: str) -> list[list[int]]:
 
 
 if __name__ == '__main__':
-    clues = parse_instance("instances/sat/i01.txt")
+    clues = parse_instance("instances/sat/i05.txt")
     solution = solve_minesweeper(clues)
     if solution is not None:
         if check_solution(clues, solution):
