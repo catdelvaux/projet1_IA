@@ -20,7 +20,7 @@ def solve_sudoku(clues):
     [x[i][j] == clues[i][j] for i in range(9) for j in range(9) if clues and clues[i][j] > 0],
 
     # ADD YOUR SUPPLEMENTARY CONSTRAINT HERE
-    
+    [AllDifferent(x[i+1][j+1]) for i in [0,3,6] for j in [0,3,6]],
     )
 
     # Solve the problem and print the solution if found
